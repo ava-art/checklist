@@ -42,3 +42,15 @@ html {
     background-size: contain;
     background-position: center;
 }
+
+.collapses{
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows .2s ease-in-out;  
+}
+
+.collapses.open {
+    grid-template-rows: 1fr;
+
+}

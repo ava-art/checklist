@@ -61,19 +61,8 @@ Route::get('/start', function () {
     return Inertia::render('Start');
 })->name('start');
 
-Route::get('/db', function () {
-    return Inertia::render('DB');
-})->name('db');
 
-Route::get('/postoyanniki', function () {
-    return Inertia::render('Dashboard');
-})->name('postoyanniki');
-Route::get('/acessory', function () {
-    return Inertia::render('Acessory');
-})->name('acessory');
-Route::get('/statistics', function () {
-    return Inertia::render('Statistics');
-})->name('statistics');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

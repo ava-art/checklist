@@ -4,13 +4,10 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
-if (!usePage().props.auth.user){
-    document.location.href = '/login'
-};
+if (!usePage().props.auth.user) {
+    document.location.href = "/login";
+}
 const homeStore = new useHomeStore();
-
-
-
 </script>
 
 <template>
@@ -29,7 +26,7 @@ const homeStore = new useHomeStore();
             "
         >
             <i
-                class="menu-line-top w-8 h-0.5 rounded-sm bg-zinc-50 rotate-45 relative "
+                class="menu-line-top w-8 h-0.5 rounded-sm bg-zinc-50 rotate-45 relative"
             ></i>
             <i
                 class="menu-line-top two w-8 h-0.5 rounded-sm bg-zinc-50 -rotate-45 absolute"
@@ -37,50 +34,28 @@ const homeStore = new useHomeStore();
         </div>
         <ul class="flex flex-col items-end justify-center">
             <li class="list-item mb-2">
-                <Link class="navbar-brand" :href="'/'">Журнал</Link>
-            </li>
-            <li class="list-item mb-2">
-                <a href="/acessory">Аксессуары</a>
-            </li>
-            <li v-if="usePage().props.auth.user?.role != 'stag'" class="list-item mb-2">
-                <a href="/statistics">Статистика</a>
-            </li>
-            <li v-if="usePage().props.auth.user?.role != 'stag'" class="list-item mb-2">
-                <a href="/db">База</a>
+                <Link class="navbar-brand" :href="'/'">Главная</Link>
             </li>
             
-            <div class="mt-8">
-                <img
-                    src="https://app.welotochka.ru/images/qr-code.gif"
-                    width="160"
-                    height="160"
-                    border="0"
-                    title="QR код"
-                />
-            </div>
-            <div class="text-right mt-4">
+            <li
+                v-if="usePage().props.auth.user?.role != 'stag'"
+                class="list-item mb-2"
+            >
+                <a href="/statistics">Статистика</a>
+            </li>
+            
 
-                <li class="list-item mt-2">
+            <div class="text-right">
+                <li class="list-item">
                     <a href="/">Обновить</a>
                 </li>
-                <li
-                class="list-item mt-4"
-                @click="
-                    (homeStore.hidden.menu = 'hidden-menu'),
-                    (homeStore.hidden.burger = '')
-                    "
-            >
-            <Link :href="route('logout')" method="post" as="button">
-                Выйти</Link
-                >
-            </li>
-        </div>
+            </div>
         </ul>
     </div>
 </template>
 
 <style>
-.menu-line-top.two{
+.menu-line-top.two {
     top: 14px;
 }
 </style>

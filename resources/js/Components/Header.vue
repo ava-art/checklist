@@ -16,12 +16,8 @@ const homeStore = new useHomeStore();
                     class="inner-header flex items-center justify-between"
                     v-if="$page.props.auth.user"
                 >
-                    <Link :href="'/'" class=" ">
-                        <img
-                            src="https://welotochka.ru/assets/cache/images/webp/templates/welotochka/image/logo-velo.png.webp"
-                            width="160"
-                            alt="Логотип Велоточка"
-                        />
+                    <Link :href="'/'" class=" text-white font-semibold ">
+                        CheckList
                     </Link>
                     <div
                         :class="'burger-menu ' + homeStore.hidden.burger"

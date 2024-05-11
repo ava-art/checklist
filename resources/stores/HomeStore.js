@@ -17,103 +17,93 @@ export const useHomeStore = defineStore("homeStore", () => {
         menu: "hidden-menu",
         oform: "not",
     });
-    const loader = ref(true)
-    const listItems = ref({
-        free: [],
-        checked: [],
-        checkedIds: [],
+    const loader = ref(true);
+    const newCategory = ref({
+        checked: false,
+        name: "",
     });
-    const itemShields = ref({});
-    const itemRepair = ref({});
+    const categories = ref([]);
+    const elements = ref({
+        open: [],
+        add: [],
+    });
 
-    const clickOform = () => {
-        hidden.value.oform == "not"
-            ? (hidden.value.oform = "active")
-            : (hidden.value.oform = "not");
-    };
-    const getFreeItems = async (params) => {
-        loader.value = true
-        listItems.value.free = [];
-        const res = await fetch(`https://app.welotochka.ru/api/start/${params.get("list")}`);
+    const getCategories = async () => {
+        const res = await fetch(`/api/get-category`);
         const data = await res.json();
-
-        data.data.forEach((element) => {
-            if (element.go != 1) {
-                listItems.value.free.push(element);
-            }
-        });
-        loader.value = false
+        categories.value = data;
     };
 
-    const setShields = async () =>{
-      
+    const addCategory = async () => {
+        if (!newCategory.value.checked)
+            return (newCategory.value.checked = !newCategory.value.checked);
+
+        if (newCategory.value.name == "")
+            return alert("Введите название категории");
         const sendData = new FormData();
-        sendData.append("set_shield", JSON.stringify(itemShields.value));
+        sendData.append("data", JSON.stringify(newCategory.value.name));
+
         try {
-            const res = await fetch("https://app.welotochka.ru/api/set-shileds", {
+            const res = await fetch(`/api/add-category`, {
                 method: "POST",
                 body: sendData,
                 headers: {
                     "X-CSRF-TOKEN": csrf,
                 },
             });
-            const { data } = await res.json();
-            
-            if (data == 1) {
-                window.location.href = "/";
-            }
-        } catch (error) {}
-    }
-    const setRepair = async () =>{
-      
-        const sendData = new FormData();
-        sendData.append("set_repair", JSON.stringify(itemRepair.value));
-        try {
-            const res = await fetch("https://app.welotochka.ru/api/set-repair", {
-                method: "POST",
-                body: sendData,
-                headers: {
-                    "X-CSRF-TOKEN": csrf,
-                },
-            });
-            const { data } = await res.json();
-           
-            if (data == 1) {
-                window.location.href = "/";
+            const data = await res.json();
+
+            if (data) {
+                newCategory.value.checked = false;
+                newCategory.value.name = "";
+                categories.value = data['data']
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
-    const editActiveElemt = (item) => {
-        console.log(item);
-        const arChekeds = listItems.value.checked;
-        const filter = arChekeds.filter(el => el.id == item.id)
-        if (!filter.length) {
-            arChekeds.push(item);
-            listItems.value.checked = arChekeds;
-        } else {
-            let newAr = [];
-            arChekeds.forEach((el) => {
-                if (el.id != item.id) {
-                    newAr.push(el);
-                }
+    const addElement = async (name, category) => {
+        if (name == "") return alert("Введите название елемента");
+
+        const sendData = new FormData();
+        sendData.append(
+            "data",
+            JSON.stringify({
+                name,
+                category_id: category.id,
+                user_id: category.user_id,
+            })
+        );
+
+        try {
+            const res = await fetch(`/api/add-element`, {
+                method: "POST",
+                body: sendData,
+                headers: {
+                    "X-CSRF-TOKEN": csrf,
+                },
             });
-            listItems.value.checked = newAr;
+            const data = await res.json();
+
+            if (data) {
+                newCategory.value.checked = false;
+                newCategory.value.name = "";
+                console.log("Запрос на категории");
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
     return {
+        addCategory,
+        getCategories,
+        addElement,
+        newCategory,
+        categories,
+        elements,
         hidden,
-        listItems,
-        itemShields,
         loader,
-        setShields,
-        itemRepair,
-        setRepair,
-        clickOform,
-        getFreeItems,
-        editActiveElemt,
     };
 });

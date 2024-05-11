@@ -10,9 +10,9 @@ services:
       - "8876:80"
     depends_on:
       - app
-    container_name: nginx_welotochka
+    container_name: nginx_checklist
     networks:
-      - welotochka_network
+      - checklist_network
     deploy:
       resources:
           limits:
@@ -28,9 +28,9 @@ services:
       - ./:/var/www/
     depends_on:
       - db
-    container_name: app_welotochka
+    container_name: app_checklist
     networks:
-      - welotochka_network
+      - checklist_network
 
   db:
     image: mysql:8.0
@@ -38,23 +38,23 @@ services:
     volumes:
       - ./tmp/db:/var/lib/mysql
     environment:
-        MYSQL_DATABASE: welotochka_db
+        MYSQL_DATABASE: checklist_db
         MYSQL_ROOT_PASSWORD: root
     ports:
       - 8101:3306
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-    container_name: db_welotochka
+    container_name: db_checklist
     networks:
-      - welotochka_network
+      - checklist_network
 
   phpmyadmin:
-    container_name: pma_welotochka
+    container_name: pma_checklist
     image: phpmyadmin/phpmyadmin
     ports:
       - 8081:80
     networks:
-      - welotochka_network
+      - checklist_network
     
 networks:
-  welotochka_network:
+  checklist_network:
     driver: bridge
