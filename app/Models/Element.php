@@ -16,8 +16,8 @@ class Element extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    public function elements(): BelongsTo
+    public function elements(): HasMany
     {
-        return $this->belongsTo(Element::class);
+        return $this->hasMany(Element::class);
     }
 }

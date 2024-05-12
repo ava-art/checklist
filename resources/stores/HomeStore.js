@@ -31,7 +31,7 @@ export const useHomeStore = defineStore("homeStore", () => {
     const getCategories = async () => {
         const res = await fetch(`/api/get-category`);
         const data = await res.json();
-        categories.value = data;
+        categories.value = data["data"];
     };
 
     const addCategory = async () => {
@@ -53,11 +53,9 @@ export const useHomeStore = defineStore("homeStore", () => {
             });
             const data = await res.json();
 
-            if (data) {
-                newCategory.value.checked = false;
-                newCategory.value.name = "";
-                categories.value = data['data']
-            }
+            newCategory.value.checked = false;
+            newCategory.value.name = "";
+            categories.value = data["data"];
         } catch (error) {
             console.log(error);
         }
@@ -89,14 +87,91 @@ export const useHomeStore = defineStore("homeStore", () => {
             if (data) {
                 newCategory.value.checked = false;
                 newCategory.value.name = "";
-                console.log("Запрос на категории");
+                categories.value = data["data"];
             }
         } catch (error) {
             console.log(error);
         }
     };
 
+    const changeChecked = async (check, id) => {
+        const sendData = new FormData();
+        sendData.append(
+            "data",
+            JSON.stringify({
+                id,
+                check,
+            })
+        );
+
+        try {
+            const res = await fetch(`/api/change-checked`, {
+                method: "POST",
+                body: sendData,
+                headers: {
+                    "X-CSRF-TOKEN": csrf,
+                },
+            });
+            const data = await res.json();
+            console.log(data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const saveComment = async (comment,id) => {
+        const sendData = new FormData();
+        sendData.append(
+            "data",
+            JSON.stringify({
+                id,
+                comment,
+            })
+        );
+
+        try {
+            const res = await fetch(`/api/change-comment`, {
+                method: "POST",
+                body: sendData,
+                headers: {
+                    "X-CSRF-TOKEN": csrf,
+                },
+            });
+            const data = await res.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const changeName = async (name, id) => {
+        const sendData = new FormData();
+        sendData.append(
+            "data",
+            JSON.stringify({
+                id,
+                name,
+            })
+        );
+
+        try {
+            const res = await fetch(`/api/change-element`, {
+                method: "POST",
+                body: sendData,
+                headers: {
+                    "X-CSRF-TOKEN": csrf,
+                },
+            });
+            const data = await res.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return {
+        saveComment,
+        changeName,
+        changeChecked,
         addCategory,
         getCategories,
         addElement,

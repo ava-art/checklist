@@ -20,10 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('rent-list', [Api\StoreRent::class, 'show']);
-Route::get('get-category', [Api\CategoriesController::class, 'get']);
+Route::get('get-category', [Api\CategoryController::class, 'get']);
 
 
-Route::post('add-category', [Api\CategoriesController::class, 'add']);
+Route::post('add-category', [Api\CategoryController::class, 'add']);
 Route::post('add-element', [Api\ElementsController::class, 'add']);
+Route::post('change-checked', [Api\ElementsController::class, 'checked']);
+Route::post('change-comment', [Api\ElementsController::class, 'comment']);
+Route::post('change-element', [Api\ElementsController::class, 'change']);
+
 
 
